@@ -124,11 +124,14 @@
     // Robust ServiceWorker registration for cross-origin preview environments
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        // Using a relative path and a try-catch to avoid origin errors in sandboxes
-        const swUrl = 'sw.js';
+        // Use a strictly relative path to ensure origin matching
+        const swUrl = './sw.js';
         navigator.serviceWorker.register(swUrl)
           .then(reg => console.log('SW Registered', reg.scope))
-          .catch(err => console.warn('SW registration failed (this is normal in some previews):', err));
+          .catch(err => {
+            // Log as info/warning instead of error to prevent breaking preview UX
+            console.info('ServiceWorker not registered (Expected in cross-origin previews):', err.message);
+          });
       });
     }
 
